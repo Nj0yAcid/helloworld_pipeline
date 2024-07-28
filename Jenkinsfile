@@ -55,13 +55,13 @@ pipeline {
 
         stage('Image tagging'){
             steps {
-                sh 'docker tag devop_repository:latest 211125431540.dkr.ecr.us-east-1.amazonaws.com/devop_repository:v.${BUILD_ID}'
+                sh 'docker tag devop_repository:v.${BUILD_ID} 211125431540.dkr.ecr.us-east-1.amazonaws.com/devop_repository:latest'
             }
         }
 
         stage('push image'){
             steps {
-                sh 'docker push 211125431540.dkr.ecr.us-east-1.amazonaws.com/devop_repository:v.${BUILD_ID}'
+                sh 'docker push 211125431540.dkr.ecr.us-east-1.amazonaws.com/devop_repository:latest'
             }
         }
 
