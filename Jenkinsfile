@@ -60,13 +60,12 @@ pipeline {
             }
         }
 
-        stage('push image')
+        stage('push image'){
             steps {
                 sh 'docker push 211125431540.dkr.ecr.us-east-1.amazonaws.com/devop_repository:latest'
                 sh 'docker push 211125431540.dkr.ecr.us-east-1.amazonaws.com/devop_repository:v.${BUILD_ID}'
             }
-
-        
+        }
 
     }
 }
