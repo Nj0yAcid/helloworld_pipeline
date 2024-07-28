@@ -45,6 +45,28 @@ pipeline {
             steps {
                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 211125431540.dkr.ecr.us-east-1.amazonaws.com' 
             }
-        } 
+        }
+
+        stage('docker image build'){
+            steps {
+                sh 'docker build -t devop_repository:v.${BUILD_ID} .'
+            }
+        }
+
+        stage('Image tagging'){
+            steps {
+                sh 'docker tag devop_repository:latest 211125431540.dkr.ecr.us-east-1.amazonaws.com/devop_repository:latest'
+                sh 'docker tag devop_repository:latest 211125431540.dkr.ecr.us-east-1.amazonaws.com/devop_repository:v.${BUILD_ID}'
+            }
+        }
+
+        stage('push image')
+            steps {
+                sh 'docker push 211125431540.dkr.ecr.us-east-1.amazonaws.com/devop_repository:latest'
+                sh 'docker push 211125431540.dkr.ecr.us-east-1.amazonaws.com/devop_repository:v.${BUILD_ID}'
+            }
+
+        
+
     }
 }
