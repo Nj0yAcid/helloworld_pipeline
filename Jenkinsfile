@@ -19,12 +19,34 @@ pipeline{
         }
     
 
-        stage('Unit test'){
+        stage('clean'){
             steps{
                 sh 'mvn clean '
                 sh 'mvn validate'
                 sh 'mvn compile' 
                 sh 'mvn install' 
+                sh 'mvn test'
+            }
+        }
+
+        stage('validate'){
+            steps{
+                sh 'mvn validate'
+                sh 'mvn compile' 
+                sh 'mvn install' 
+                sh 'mvn test'
+            }
+        }
+        
+        stage('compile'){
+            steps{
+                sh 'mvn compile' 
+                sh 'mvn test'
+            }
+        }
+
+        stage('test'){
+            steps{
                 sh 'mvn test'
             }
         }
