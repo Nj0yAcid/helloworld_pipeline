@@ -1,53 +1,44 @@
-pipeline{
+pipeline {
     agent any
-    
     tools{
         maven 'M2_HOME'
     }
-
-    environment{
-        registry = '211125431540.dkr.ecr.us-east-1.amazonaws.com/devops_repository'
+    environment {
+        registry = '076892551558.dkr.ecr.us-east-1.amazonaws.com/devop_repository'
         registryCredential = 'jenkins-ecr'
         dockerimage = ''
     }
-
-    stages{
+    stages {
         stage('Checkout'){
             steps{
-                git branch: 'main', url: 'https://github.com/Nj0yAcid/helloworld_pipeline.git'
+                git branch: 'main', url: 'https://github.com/utrains/helloworld_pipeline.git'
             }
         }
-    
-
-        stage('Unit test'){
-            steps{
-                sh 'mvn clean'
-                sh 'mvn compile'
+        stage('Code Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('Test') {
+            steps {
                 sh 'mvn test'
             }
         }
-
-        stage('Build'){
-            steps{
-                sh 'mvn package'
+        stage('Build Image') {
+            steps {
+                script{
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
+                } 
             }
         }
-
-        stage('Build docker image'){
+        stage('Deploy image') {
             steps{
-                script{
-                    sh 'docker build -t ${registry}:{BUILD_ID} .'
+                script{ 
+                    docker.withRegistry("https://"+registry,"ecr:us-east-1:"+registryCredential) {
+                        dockerImage.push()
+                    }
                 }
             }
-        }
-
-        stage('Push docker image in ECR'){
-            steps{
-                script{
-                    sh 'docker push ${registry}:{BUILD_ID}'
-                }
-            }
-        }
+        }  
     }
 }
-
