@@ -1,7 +1,7 @@
 pipeline{
     agent any
     tools{
-        M2_HOME
+        'M2_HOME'
     }
 
     environment{
