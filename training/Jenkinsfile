@@ -4,15 +4,34 @@ pipeline{
     tools { maven 'M2_HOME'}
     
     stages{
+       /* 
         stage("Unit Test"){
             steps{
                 sh 'mvn clean'
                 sh 'mvn compile'
                 sh 'mvn test'
             }
-
-            }
+        }
         
+        */
+        stage("Clean"){
+            steps{
+                sh 'mvn clean'
+            }
+        }
+
+        stage("compile"){
+            steps{
+                sh 'mvn compile'
+            }
+        }
+
+        stage("test"){
+            steps{
+                sh 'mvn test'
+            }
+        }
+
         stage('Build'){
             steps{
                 sh 'mvn build'
