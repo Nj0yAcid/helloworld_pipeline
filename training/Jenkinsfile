@@ -1,0 +1,17 @@
+pipeline{
+    agent any
+
+    tools { maven 'M2_HOME'}
+    
+    stages{
+        stage("Unit Test"){
+            sh 'mvn clean'
+            sh 'mvn compile'
+            sh 'mvn test'
+            }
+        
+        stage('Build'){
+            sh 'mvn build'
+        }
+    }
+}
